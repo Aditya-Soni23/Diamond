@@ -1,18 +1,18 @@
 const CACHE_NAME = 'diamond-v2026-07-24';
 
 const APP_SHELL = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/script.js',
-  '/cursor.js',
-  '/manifest.json',
-  '/assets/applogo.png',
-  '/assets/DiamondLogo.png',
-  '/products/products.css',
-  '/products/products.js',
-  '/industries/industries.css',
-  '/industries/industries.js'
+  './',
+  'index.html',
+  'style.css',
+  'script.js',
+  'cursor.js',
+  'manifest.json',
+  'assets/applogo.png',
+  'assets/DiamondLogo.png',
+  'products/products.css',
+  'products/products.js',
+  'industries/industries.css',
+  'industries/industries.js'
 ];
 
 // Install
@@ -66,7 +66,7 @@ self.addEventListener('fetch', (event) => {
         .then((response) => response)
         .catch(() =>
           caches.match(request).then((response) => {
-            return response || caches.match('/index.html');
+            return response || caches.match('index.html');
           })
         )
     );

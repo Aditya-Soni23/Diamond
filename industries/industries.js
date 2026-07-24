@@ -21,7 +21,7 @@
     badge: "Flagship Discipline",
     title: "Website Engineering",
     desc: "This is where DIAMOND lives. Business sites, client products, internal tools, dashboards, and landing pages — engineered for speed, built to convert, and designed to feel premium from the first pixel.",
-    image: "/assets/diamondversion3.png",
+    image: "../assets/diamondversion3.png",
     tags: ["Business Websites", "Client Products", "Dashboards & Tools", "Portfolios", "Landing Pages", "Responsive UI/UX", "SEO Ready", "Secure Development", "Fast Performance"],
     stats: [
       { value: 100, suffix: "+", label: "Websites shipped" },

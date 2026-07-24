@@ -1,16 +1,16 @@
 {
-  "id": "/",
+  "id": "./",
   "name": "DIAMOND",
   "short_name": "DIAMOND",
   "description": "Premium technology and engineering by DIAMOND.",
-  "start_url": "/index.html",
-  "scope": "/",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0b1020",
   "theme_color": "#0b1020",
   "icons": [
     {
-      "src": "/assets/applogo.png",
+      "src": "assets/applogo.png",
       "sizes": "1254x1254",
       "type": "image/png",
       "purpose": "any maskable"
