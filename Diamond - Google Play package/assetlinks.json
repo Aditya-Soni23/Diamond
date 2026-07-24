@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.diamond.app",
+        "sha256_cert_fingerprints": ["71:21:F9:E6:40:8A:BB:3C:CF:C9:8C:A5:8F:CF:0E:98:B5:72:9F:64:67:20:E4:97:92:44:01:3C:3A:97:52:3F"]
+      }
+    }]

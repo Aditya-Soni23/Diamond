@@ -895,6 +895,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'alarm_app', name: 'alarm_app', platform: 'Windows', filename: 'alarm_app.exe', version: '3.0.1', description: 'Precision scheduling and macro-triggered alarms.', category: 'Productivity', size: '12 MB', year: 2024, dev: 'Diamond', downloads: '8+', rating: 4.5, featured: false, icon: 'assets/appicons/alarmapp.ico' },
     
         // Android (Featured + Others)
+        { id: 'diamond-V4', name: 'Diamond V4', platform: 'Android', filename: 'Diamond V4.apk', version: '4.0.0', description: 'The Diamond Company Version 4.0 App.', category: 'Utilities', size: '3 MB', year: 2026, dev: 'Diamond', downloads: '100+', rating: 5.0, featured: false, icon: 'assets/applogo.png', features: ['Quantum Encryption', 'Live Monitoring', 'Zero-Latency UI'] },
         { id: 'sam-protocol', name: 'The 5am Protocol', platform: 'Android', filename: 'The 5am Protocol.apk', version: '4.5.0', description: 'The ultimate enterprise security suite.', category: 'Utilities', size: '54 MB', year: 2026, dev: 'Diamond', downloads: '100+', rating: 5.0, featured: false, icon: 'assets/appicons/the5amprotocol.png', features: ['Quantum Encryption', 'Live Monitoring', 'Zero-Latency UI'] },
         { id: 'notex', name: 'NoteX', platform: 'Android', filename: 'NoteX.apk', version: '5.1.2', description: 'High-performance markdown notes with cloud sync. Your thoughts, organized, secure, and accessible everywhere.', category: 'Productivity', size: '15 MB', year: 2023, dev: 'Diamond', downloads: '200+', rating: 4.9, featured: true, icon: 'assets/appicons/notex.png', features: ['Cloud Sync', 'Markdown Support', 'Offline Mode'] },
         { id: 'aaj-kya-banega', name: 'Aaj Kya Banega', platform: 'Android', filename: 'Aaj Kya Banega.apk', version: '1.2.0', description: 'AI meal planning. Solves the daily dilemma of what to cook.', category: 'Productivity', size: '24 MB', year: 2026, dev: 'Diamond', downloads: '25+', rating: 4.7, featured: false, icon: 'assets/appicons/aajkyabanega.png' },
@@ -925,7 +926,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const delay = index * 0.05; // Staggered animation
             
             if (app.featured) {
-                featuredContainer.innerHTML = `
+                featuredContainer.innerHTML += `
                     <div class="d-dl-featured-card d-dl-animate-in" data-id="${app.id}">
                         <div class="d-dl-featured-icon">
                         <img src="${app.icon}" alt="${app.name} Logo" class="d-dl-app-logo">
