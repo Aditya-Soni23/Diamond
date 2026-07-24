@@ -1,0 +1,603 @@
+/* ==========================================================================
+   Diamond Products Section
+   --------------------------------------------------------------------------
+   Design tokens (kept local to this file, all selectors prefixed to avoid
+   collisions with the rest of the site):
+
+   Color:
+     --dp-bg-void      #06070B  page-level black the section sits on
+     --dp-bg-panel     #0B0E16  card surface base (before glass overlay)
+     --dp-blue         #4F8CFF  primary accent
+     --dp-cyan         #38E1E1  secondary accent (gradient far end)
+     --dp-violet       #8B6BFF  gradient midpoint / glow
+     --dp-ink          #F3F5FA  primary text
+     --dp-ink-dim      #97A0B3  secondary text
+
+   Type:
+     Display -> 'Space Grotesk' (geometric, faceted letterforms echo a cut
+       gem -- ties the type directly to the "Diamond" brand mark)
+     Body    -> 'Inter'
+     Mono    -> 'JetBrains Mono' (timestamps, eyebrow label, badge)
+
+   Signature element:
+     Every card has one corner "cut" with clip-path, like a gem facet, and
+     a matching diagonal seam of light across that cut on hover. This is the
+     one recurring motif -- everything else stays quiet around it.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap');
+
+#diamondproducts-section {
+  --dp-bg-void: #06070b;
+  --dp-bg-panel: #0b0e16;
+  --dp-blue: #4f8cff;
+  --dp-cyan: #38e1e1;
+  --dp-violet: #8b6bff;
+  --dp-ink: #f3f5fa;
+  --dp-ink-dim: #97a0b3;
+  --dp-border: rgba(255, 255, 255, 0.09);
+  --dp-glass: rgba(255, 255, 255, 0.045);
+  --dp-facet: 26px;
+
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--dp-bg-void);
+  padding: clamp(4rem, 8vw, 8rem) clamp(1.25rem, 4vw, 3rem);
+  color: var(--dp-ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+#diamondproducts-section * {
+  box-sizing: border-box;
+}
+
+/* prefers-reduced-motion kill switch, checked by every animated rule below */
+@media (prefers-reduced-motion: reduce) {
+  #diamondproducts-section * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Ambient background glow -- slow, drifting, never distracting           */
+/* ---------------------------------------------------------------------- */
+
+.diamondproducts-glow-a,
+.diamondproducts-glow-b {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.diamondproducts-glow-a {
+  top: -12%;
+  left: -8%;
+  width: min(48vw, 620px);
+  height: min(48vw, 620px);
+  background: radial-gradient(circle at 30% 30%, var(--dp-blue), transparent 70%);
+  animation: diamondproducts-drift-a 22s ease-in-out infinite;
+}
+
+.diamondproducts-glow-b {
+  bottom: -18%;
+  right: -10%;
+  width: min(40vw, 520px);
+  height: min(40vw, 520px);
+  background: radial-gradient(circle at 60% 60%, var(--dp-violet), transparent 70%);
+  animation: diamondproducts-drift-b 26s ease-in-out infinite;
+}
+
+@keyframes diamondproducts-drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(3%, 4%) scale(1.08); }
+}
+
+@keyframes diamondproducts-drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-4%, -3%) scale(1.06); }
+}
+
+.diamondproducts-wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Header                                                                  */
+/* ---------------------------------------------------------------------- */
+
+.diamondproducts-header {
+  max-width: 640px;
+  margin: 0 0 clamp(2.5rem, 5vw, 4rem);
+}
+
+.diamondproducts-eyebrow {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dp-cyan);
+  margin-bottom: 1rem;
+}
+
+.diamondproducts-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: clamp(2.1rem, 4vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.85rem;
+  background: linear-gradient(100deg, var(--dp-ink) 40%, var(--dp-blue) 75%, var(--dp-cyan) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.diamondproducts-subtitle {
+  font-size: clamp(0.95rem, 1.1vw, 1.08rem);
+  line-height: 1.6;
+  color: var(--dp-ink-dim);
+  margin: 0;
+}
+
+.diamondproducts-search {
+  max-width: 520px;
+  margin: 0 0 clamp(2rem, 4vw, 3rem);
+}
+
+.diamondproducts-search-label {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: var(--dp-ink-dim);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.diamondproducts-search-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--dp-border);
+  background: var(--dp-glass);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.diamondproducts-search-control:focus-within {
+  border-color: var(--dp-cyan);
+  box-shadow: 0 0 0 3px rgba(56, 225, 225, 0.14);
+}
+
+.diamondproducts-search-icon {
+  flex: 0 0 auto;
+  width: 1.1rem;
+  margin-left: 1rem;
+  color: var(--dp-cyan);
+}
+
+#diamondproducts-search-input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  padding: 0.9rem 0.75rem;
+  color: var(--dp-ink);
+  background: transparent;
+  font: inherit;
+}
+
+#diamondproducts-search-input::placeholder { color: var(--dp-ink-dim); }
+
+.diamondproducts-search-clear {
+  flex: 0 0 auto;
+  margin-right: 0.45rem;
+  border: 0;
+  padding: 0.4rem 0.55rem;
+  color: var(--dp-ink-dim);
+  background: transparent;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.diamondproducts-search-clear:hover { color: var(--dp-ink); }
+
+/* ---------------------------------------------------------------------- */
+/* Grid                                                                    */
+/* ---------------------------------------------------------------------- */
+
+.diamondproducts-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+@media (max-width: 1180px) {
+  .diamondproducts-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 860px) {
+  .diamondproducts-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .diamondproducts-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Card                                                                    */
+/* ---------------------------------------------------------------------- */
+
+.diamondproducts-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  background:
+    linear-gradient(155deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01) 40%),
+    var(--dp-bg-panel);
+  border: 1px solid var(--dp-border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 20px 40px -20px rgba(0,0,0,0.6);
+  overflow: hidden;
+  /* the signature facet cut, top-right corner */
+  clip-path: polygon(
+    0 0, calc(100% - var(--dp-facet)) 0, 100% var(--dp-facet),
+    100% 100%, 0 100%
+  );
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    transform 0.55s cubic-bezier(.2,.8,.2,1),
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
+  animation: diamondproducts-float 7s ease-in-out infinite;
+  animation-play-state: paused; /* resumed once revealed, see .is-visible */
+}
+
+.diamondproducts-card.diamondproducts-card--visible {
+  opacity: 1;
+  transform: translateY(0);
+  animation: diamondproducts-reveal 0.7s cubic-bezier(.2,.8,.2,1) forwards,
+             diamondproducts-float 7s ease-in-out 0.7s infinite;
+}
+
+@keyframes diamondproducts-reveal {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes diamondproducts-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+.diamondproducts-card:hover,
+.diamondproducts-card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset, 0 30px 60px -24px rgba(79,140,255,0.35);
+  border-color: rgba(79,140,255,0.4);
+  animation-play-state: running;
+}
+
+/* facet seam of light that appears along the cut corner on hover */
+.diamondproducts-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--dp-facet);
+  height: var(--dp-facet);
+  background: linear-gradient(135deg, var(--dp-cyan), var(--dp-blue));
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.diamondproducts-card:hover::after,
+.diamondproducts-card:focus-within::after {
+  opacity: 0.9;
+}
+
+/* animated border glow ring, sits behind the card, revealed on hover */
+.diamondproducts-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: 20px;
+  background: conic-gradient(from 0deg, var(--dp-blue), var(--dp-violet), var(--dp-cyan), var(--dp-blue));
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 0.5s ease;
+  animation: diamondproducts-spin 6s linear infinite;
+}
+
+.diamondproducts-card:hover::before,
+.diamondproducts-card:focus-within::before {
+  opacity: 0.55;
+}
+
+@keyframes diamondproducts-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Card media                                                              */
+/* ---------------------------------------------------------------------- */
+
+.diamondproducts-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: linear-gradient(140deg, #10131d, #0b0e16);
+}
+
+.diamondproducts-image {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1);
+  transition: transform 0.7s cubic-bezier(.2,.8,.2,1), filter 0.7s ease;
+  filter: saturate(0.94) brightness(0.96);
+}
+
+.diamondproducts-card:hover .diamondproducts-image,
+.diamondproducts-card:focus-within .diamondproducts-image {
+  transform: scale(1.08);
+  filter: saturate(1.05) brightness(1);
+}
+
+.diamondproducts-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6,7,11,0) 55%, rgba(6,7,11,0.85) 100%);
+}
+
+.diamondproducts-image-fallback {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dp-ink-dim);
+}
+
+/* Keep the placeholder out of view until the product image is unavailable. */
+.diamondproducts-image-fallback[hidden] {
+  display: none;
+}
+
+.diamondproducts-image-fallback svg {
+  width: 34px;
+  height: 34px;
+  opacity: 0.5;
+}
+
+/* NEW badge */
+.diamondproducts-badge {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  z-index: 2;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  padding: 0.32rem 0.6rem;
+  border-radius: 999px;
+  color: #04121c;
+  background: linear-gradient(120deg, var(--dp-cyan), var(--dp-blue));
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.25) inset, 0 6px 16px -4px rgba(79,140,255,0.7);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Card body                                                               */
+/* ---------------------------------------------------------------------- */
+
+.diamondproducts-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.4rem 1.4rem 1.5rem;
+  gap: 0.6rem;
+}
+
+.diamondproducts-card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.14rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0;
+  color: var(--dp-ink);
+}
+
+.diamondproducts-card-desc {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--dp-ink-dim);
+  margin: 0;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Visit button, with ripple                                              */
+/* ---------------------------------------------------------------------- */
+
+.diamondproducts-button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  margin-top: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: linear-gradient(120deg, rgba(79,140,255,0.16), rgba(139,107,255,0.12));
+  color: var(--dp-ink);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.88rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.2s ease;
+}
+
+.diamondproducts-button:hover {
+  border-color: rgba(79,140,255,0.55);
+  background: linear-gradient(120deg, rgba(79,140,255,0.28), rgba(139,107,255,0.22));
+}
+
+.diamondproducts-button:active {
+  transform: scale(0.97);
+}
+
+.diamondproducts-button svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.3s ease;
+}
+
+.diamondproducts-button:hover svg {
+  transform: translate(2px, -2px);
+}
+
+.diamondproducts-ripple {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  transform: scale(0);
+  pointer-events: none;
+  animation: diamondproducts-ripple-anim 0.6s ease-out forwards;
+}
+
+@keyframes diamondproducts-ripple-anim {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Loading state -- skeleton cards                                        */
+/* ---------------------------------------------------------------------- */
+
+.diamondproducts-state {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.diamondproducts-loading-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 1180px) { .diamondproducts-loading-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 860px)  { .diamondproducts-loading-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px)  { .diamondproducts-loading-grid { grid-template-columns: 1fr; } }
+
+.diamondproducts-skeleton-card {
+  height: 300px;
+  border-radius: 20px;
+  background: linear-gradient(100deg, var(--dp-bg-panel) 30%, rgba(255,255,255,0.05) 50%, var(--dp-bg-panel) 70%);
+  background-size: 200% 100%;
+  border: 1px solid var(--dp-border);
+  animation: diamondproducts-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes diamondproducts-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Error / empty states                                                    */
+/* ---------------------------------------------------------------------- */
+
+.diamondproducts-state-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  color: var(--dp-blue);
+  background: rgba(79,140,255,0.1);
+  border: 1px solid rgba(79,140,255,0.25);
+}
+
+.diamondproducts-state--error .diamondproducts-state-icon {
+  color: #ff8a80;
+  background: rgba(255,138,128,0.1);
+  border-color: rgba(255,138,128,0.28);
+}
+
+.diamondproducts-state-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+}
+
+.diamondproducts-state-text {
+  font-size: 0.9rem;
+  color: var(--dp-ink-dim);
+  margin: 0;
+  max-width: 380px;
+  margin-inline: auto;
+}
+
+.diamondproducts-retry-btn {
+  margin-top: 1.2rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: 10px;
+  border: 1px solid rgba(79,140,255,0.4);
+  background: rgba(79,140,255,0.12);
+  color: var(--dp-ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.diamondproducts-retry-btn:hover {
+  background: rgba(79,140,255,0.22);
+}
+
+.diamondproducts-retry-btn:active {
+  transform: scale(0.97);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Focus visibility (accessibility floor)                                 */
+/* ---------------------------------------------------------------------- */
+
+#diamondproducts-section a:focus-visible,
+#diamondproducts-section button:focus-visible {
+  outline: 2px solid var(--dp-cyan);
+  outline-offset: 2px;
+}

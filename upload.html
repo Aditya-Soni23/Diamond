@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Hub | Diamond Company</title>
+  <link rel="icon" type="image/png" href="../assets/DiamondLogo.png">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background: #0d0d11;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    #protectedContent {
+      display: none; /* Hidden until Google Auth verifies identity */
+      width: 100%;
+      max-width: 600px;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+    .logout-btn {
+      padding: 8px 16px;
+      background: rgba(255, 24, 24, 0.1);
+      border: 1px solid rgba(255, 69, 58, 0.2);
+      color: #ff453a;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .logout-btn:hover {
+      background: rgba(255, 69, 58, 0.2);
+    }
+    .upload-box {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+    }
+    .form-group {
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8a8a93;
+      margin-bottom: 8px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 15px;
+      transition: all 0.2s ease;
+      outline: none;
+      resize: vertical;
+    }
+    input:focus, textarea:focus {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    button.submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+    button.submit-btn:hover {
+      opacity: 0.9;
+    }
+    .status-banner {
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 14px;
+      margin-top: 20px;
+      display: none;
+    }
+    .status-banner.success {
+      background: rgba(52, 199, 89, 0.1);
+      border: 1px solid rgba(52, 199, 89, 0.3);
+      color: #30d158;
+    }
+    .status-banner.error {
+      background: rgba(255, 69, 58, 0.1);
+      border: 1px solid rgba(255, 69, 58, 0.3);
+      color: #ff453a;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="protectedContent">
+    <div class="header-bar">
+      <h1>Project Management Console</h1>
+      <button class="logout-btn" id="logoutBtn">Sign Out</button>
+    </div>
+
+    <div class="upload-box">
+      <form id="uploadForm">
+        <div class="form-group">
+          <label for="title">Project Title</label>
+          <input type="text" id="title" required placeholder="e.g., Scanify Pro">
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" rows="4" required placeholder="Describe core aspects, stack, architectural focus..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="webLink">Website Deployment Link</label>
+          <input type="url" id="webLink" required placeholder="https://example.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="imgLink">Display Image URL</label>
+          <input type="url" id="imgLink" required placeholder="https://example.com/preview.jpg">
+        </div>
+
+        <button type="submit" class="submit-btn" id="publishBtn">Publish Project</button>
+        <div class="status-banner" id="statusBanner"></div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, push, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBvS4HJ07d7Umyb89dCsn2bLALvcqnpoSs",
+      authDomain: "diamond-c21dc.firebaseapp.com",
+      projectId: "diamond-c21dc",
+      storageBucket: "diamond-c21dc.firebasestorage.app",
+      messagingSenderId: "1035207428852",
+      appId: "1:1035207428852:web:ce2faa86d058b75a56eca1",
+      measurementId: "G-RX40Y0EYW3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    const protectedContent = document.getElementById('protectedContent');
+    const uploadForm = document.getElementById('uploadForm');
+    const statusBanner = document.getElementById('statusBanner');
+    const logoutBtn = document.getElementById('logoutBtn');
+    
+    const allowedAdmin = "adityasonihyderabad@gmail.com";
+
+    // 1. Enforce strict session validation on load
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.email === allowedAdmin) {
+        protectedContent.style.display = 'block'; 
+      } else {
+        window.location.href = "admin.html"; // Bounce unauthorized users out instantly
+      }
+    });
+
+    // 2. Safe Database Writing Sequence
+    uploadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusBanner.style.display = 'none';
+
+      const projectPayload = {
+        title: document.getElementById('title').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        websiteLink: document.getElementById('webLink').value.trim(),
+        imageLink: document.getElementById('imgLink').value.trim(),
+        timestamp: Date.now()
+      };
+
+      try {
+        // Generate isolated reference token first
+        const projectsRootRef = ref(db, 'projects');
+        const uniqueProjectNode = push(projectsRootRef);
+
+        // Using .update() strictly to protect adjacent database nodes from being overwritten
+        await update(uniqueProjectNode, projectPayload);
+
+        statusBanner.textContent = "Project published successfully.";
+        statusBanner.className = "status-banner success";
+        statusBanner.style.display = 'block';
+        
+        uploadForm.reset();
+      } catch (error) {
+        statusBanner.textContent = `Upload Error: ${error.message}`;
+        statusBanner.className = "status-banner error";
+        statusBanner.style.display = 'block';
+      }
+    });
+
+    // 3. Secure Sign Out
+    logoutBtn.addEventListener('click', () => {
+      signOut(auth).then(() => {
+        window.location.href = "admin.html";
+      });
+    });
+  </script>
+</body>
+</html>

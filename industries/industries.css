@@ -1,0 +1,500 @@
+/* =================================================================
+   DIAMOND — INDUSTRIES SECTION STYLES
+   All selectors are prefixed with "indus" to avoid collisions.
+   ================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+#indusSection {
+  /* ---- tokens ---- */
+  --indus-black: #050709;
+  --indus-black2: #090c11;
+  --indus-black3: #0d1117;
+  --indus-white: #f4f7fb;
+  --indus-muted: #8a95a6;
+  --indus-muted-dim: #5b6473;
+  --indus-blue: #3b82ff;
+  --indus-blue2: #5ec8ff;
+  --indus-blue-dim: #1c3f7a;
+  --indus-glass: rgba(255, 255, 255, 0.045);
+  --indus-glass-hi: rgba(255, 255, 255, 0.08);
+  --indus-border: rgba(255, 255, 255, 0.09);
+  --indus-border-hi: rgba(94, 200, 255, 0.35);
+  --indus-glow: rgba(59, 130, 255, 0.5);
+  --indus-radius: 18px;
+  --indus-radius-sm: 10px;
+  --indus-font-display: 'Space Grotesk', 'Sora', sans-serif;
+  --indus-font-body: 'Inter', sans-serif;
+  --indus-font-mono: 'JetBrains Mono', monospace;
+  --indus-ease: cubic-bezier(.16,.84,.44,1);
+
+  position: relative;
+  display: block;
+  background: var(--indus-black);
+  color: var(--indus-white);
+  font-family: var(--indus-font-body);
+  overflow: clip;
+  isolation: isolate;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+#indusSection * { box-sizing: border-box; }
+#indusSection img { max-width: 100%; display: block; }
+#indusSection a { color: inherit; text-decoration: none; }
+#indusSection button { font-family: inherit; cursor: pointer; }
+
+@media (prefers-reduced-motion: reduce) {
+  #indusSection *, #indusSection *::before, #indusSection *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- ambient overlays ---- */
+.indusNoise {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  opacity: 0.05; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.indusCursorGlow {
+  position: fixed; top: 0; left: 0; width: 480px; height: 480px;
+  border-radius: 50%; pointer-events: none; z-index: 2;
+  background: radial-gradient(circle, rgba(59,130,255,0.14), transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: opacity .3s ease;
+  opacity: 0;
+  will-change: transform;
+}
+#indusSection:hover .indusCursorGlow { opacity: 1; }
+
+/* ---- shared type ---- */
+.indusEyebrow, .indusKicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--indus-font-mono);
+  font-size: 12px; letter-spacing: 0.18em; font-weight: 500;
+  color: var(--indus-blue2); text-transform: uppercase;
+}
+.indusEyebrowDot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--indus-blue2);
+  box-shadow: 0 0 12px 2px var(--indus-blue2);
+  animation: indusPulseDot 1.8s ease-in-out infinite;
+}
+@keyframes indusPulseDot { 0%,100%{ opacity: 1; transform: scale(1);} 50%{ opacity:.4; transform: scale(1.3);} }
+
+.indusGradientText {
+  background: linear-gradient(100deg, var(--indus-blue2), var(--indus-blue) 55%, #a9e3ff);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  background-size: 200% 100%;
+  animation: indusGradientShift 6s ease infinite;
+}
+@keyframes indusGradientShift { 0%,100%{background-position: 0% 50%;} 50%{background-position: 100% 50%;} }
+
+.indusSectionTitle {
+  font-family: var(--indus-font-display); font-weight: 700;
+  font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.08; letter-spacing: -0.01em;
+  margin: 18px 0 14px;
+}
+.indusSectionLead { color: var(--indus-muted); font-size: 1.05rem; max-width: 620px; }
+.indusSectionIntro { position: relative; z-index: 3; max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px,5vw,64px); }
+
+/* ---- reveal-on-scroll ---- */
+.indusReveal { opacity: 0; transform: translateY(28px); transition: opacity .8s var(--indus-ease), transform .8s var(--indus-ease); }
+.indusReveal.indusInView { opacity: 1; transform: translateY(0); }
+.indusRevealDelay1.indusInView { transition-delay: .08s; }
+.indusRevealDelay2.indusInView { transition-delay: .16s; }
+.indusRevealDelay3.indusInView { transition-delay: .24s; }
+
+/* =================================================================
+   HERO
+   ================================================================= */
+.indusHero {
+  position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 140px 20px 100px; overflow: hidden;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(59,130,255,0.16), transparent 70%),
+    var(--indus-black);
+}
+.indusParticlesCanvas { position: absolute; inset: 0; z-index: 1; opacity: 0.75; }
+.indusHeroGrid {
+  position: absolute; inset: -10%; z-index: 0;
+  background-image:
+    linear-gradient(rgba(59,130,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,255,0.08) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 60% 55% at 50% 30%, black, transparent 75%);
+  animation: indusGridDrift 22s linear infinite;
+}
+@keyframes indusGridDrift { from{ background-position: 0 0, 0 0;} to{ background-position: 56px 56px, 56px 56px;} }
+.indusHeroGlowA, .indusHeroGlowB {
+  position: absolute; border-radius: 50%; filter: blur(90px); z-index: 0; pointer-events: none;
+}
+.indusHeroGlowA { width: 480px; height: 480px; background: rgba(59,130,255,0.30); top: -140px; left: -120px; animation: indusFloatSlow 12s ease-in-out infinite; }
+.indusHeroGlowB { width: 380px; height: 380px; background: rgba(94,200,255,0.22); bottom: -120px; right: -80px; animation: indusFloatSlow 15s ease-in-out infinite reverse; }
+@keyframes indusFloatSlow { 0%,100%{ transform: translate(0,0);} 50%{ transform: translate(30px,-30px);} }
+
+.indusHeroContent { position: relative; z-index: 3; max-width: 880px; margin: 0 auto; text-align: center; }
+.indusHeroContent .indusEyebrow { justify-content: center; margin-bottom: 22px; }
+.indusHeroTitle {
+  font-family: var(--indus-font-display); font-weight: 800; letter-spacing: -0.02em;
+  font-size: clamp(2.6rem, 8vw, 6rem); line-height: 1.02; margin: 0 0 22px;
+}
+.indusHeroSub { color: var(--indus-muted); font-size: clamp(1rem, 1.6vw, 1.25rem); max-width: 620px; margin: 0 auto 40px; }
+
+.indusHeroStats { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-bottom: 46px; }
+.indusHeroStat {
+  padding: 10px 18px; border: 1px solid var(--indus-border); border-radius: 999px;
+  background: var(--indus-glass); backdrop-filter: blur(10px);
+  font-family: var(--indus-font-mono); font-size: 13px; color: var(--indus-muted);
+  display: flex; align-items: center; gap: 8px;
+}
+.indusHeroStat b { color: var(--indus-white); font-size: 15px; font-weight: 700; }
+
+.indusScrollCue {
+  background: none; border: 1px solid var(--indus-border); color: var(--indus-muted);
+  padding: 12px 22px; border-radius: 999px; font-size: 13px; letter-spacing: 0.04em;
+  display: inline-flex; align-items: center; gap: 10px;
+  transition: border-color .3s, color .3s, transform .3s;
+}
+.indusScrollCue:hover { color: var(--indus-white); border-color: var(--indus-border-hi); transform: translateY(-2px); }
+.indusScrollCueDot { width: 6px; height: 10px; border-radius: 4px; border: 1px solid currentColor; position: relative; }
+.indusScrollCueDot::after {
+  content: ""; position: absolute; top: 2px; left: 50%; width: 2px; height: 3px; background: var(--indus-blue2);
+  transform: translateX(-50%); border-radius: 2px; animation: indusScrollDot 1.6s ease infinite;
+}
+@keyframes indusScrollDot { 0%{ top:2px; opacity:1;} 80%{ top:8px; opacity:0;} 100%{ top:2px; opacity:0;} }
+
+/* =================================================================
+   NAV
+   ================================================================= */
+.indusNav {
+  position: sticky; top: 0; z-index: 40; padding: 14px clamp(16px,4vw,48px);
+  background: rgba(5,7,9,0.72); backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid var(--indus-border);
+}
+.indusNavInner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; gap: 22px; }
+.indusNavLabel { font-family: var(--indus-font-mono); font-size: 11px; letter-spacing: .18em; color: var(--indus-muted-dim); flex: none; }
+.indusNavTrack { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
+.indusNavTrack::-webkit-scrollbar { display: none; }
+.indusNavNode {
+  flex: none; display: flex; align-items: center; gap: 8px;
+  padding: 7px 14px; border-radius: 999px; border: 1px solid var(--indus-border);
+  background: var(--indus-glass); color: var(--indus-muted); font-size: 12.5px; font-weight: 500;
+  white-space: nowrap; transition: all .25s var(--indus-ease); position: relative;
+}
+.indusNavNode::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--indus-muted-dim);
+  transition: all .25s ease; flex: none;
+}
+.indusNavNode:hover, .indusNavNode.indusNavActive {
+  color: var(--indus-white); border-color: var(--indus-border-hi); background: rgba(59,130,255,0.1);
+}
+.indusNavNode:hover::before, .indusNavNode.indusNavActive::before {
+  background: var(--indus-blue2); box-shadow: 0 0 8px 2px var(--indus-blue2);
+}
+
+/* =================================================================
+   FLAGSHIP — WEBSITE ENGINEERING
+   ================================================================= */
+.indusFlagship {
+  position: relative; margin: 90px clamp(14px,4vw,48px) 0; padding: clamp(28px,5vw,64px);
+  border-radius: 28px; overflow: hidden;
+  background: linear-gradient(160deg, #0b1220, #060809 65%);
+  border: 1px solid var(--indus-border-hi);
+  box-shadow: 0 0 0 1px rgba(59,130,255,0.06), 0 40px 100px -40px rgba(59,130,255,0.35);
+}
+.indusFlagshipGrid {
+  position: absolute; inset: 0; opacity: .5;
+  background-image: linear-gradient(rgba(59,130,255,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,255,0.10) 1px, transparent 1px);
+  background-size: 42px 42px; mask-image: radial-gradient(ellipse 70% 70% at 80% 20%, black, transparent 70%);
+}
+.indusFlagshipBadge {
+  display: inline-flex; align-items: center; gap: 8px; font-family: var(--indus-font-mono);
+  font-size: 11.5px; letter-spacing: .14em; color: var(--indus-blue2); text-transform: uppercase;
+  padding: 6px 12px; border: 1px solid var(--indus-border-hi); border-radius: 999px; background: rgba(59,130,255,0.08);
+  position: relative; z-index: 2;
+}
+.indusFlagshipInner { position: relative; z-index: 2; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(24px,4vw,56px); align-items: center; margin-top: 20px; }
+@media (max-width: 900px) { .indusFlagshipInner { grid-template-columns: 1fr; } }
+.indusFlagshipTitle { font-family: var(--indus-font-display); font-weight: 800; font-size: clamp(1.9rem, 3.6vw, 3rem); line-height: 1.06; margin: 6px 0 16px; }
+.indusFlagshipDesc { color: var(--indus-muted); font-size: 1.02rem; margin-bottom: 26px; max-width: 560px; }
+.indusFlagshipTags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+.indusTag {
+  font-size: 12px; font-family: var(--indus-font-mono); color: var(--indus-muted);
+  border: 1px solid var(--indus-border); padding: 5px 10px; border-radius: 7px; background: rgba(255,255,255,0.02);
+  transition: color .2s, border-color .2s;
+}
+.indusTag:hover { color: var(--indus-white); border-color: var(--indus-border-hi); }
+.indusFlagshipStats { display: grid; grid-template-columns: repeat(3, auto); gap: clamp(18px,3vw,36px); }
+.indusFlagshipStat b { display: block; font-family: var(--indus-font-display); font-size: clamp(1.6rem,2.6vw,2.2rem); color: var(--indus-white); }
+.indusFlagshipStat span { font-size: 12.5px; color: var(--indus-muted); }
+
+.indusFlagshipVisual { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3; border: 1px solid var(--indus-border); }
+.indusFlagshipVisual img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.9) contrast(1.05) brightness(0.85); transform: scale(1.05); transition: transform 1.2s var(--indus-ease); }
+.indusFlagship:hover .indusFlagshipVisual img { transform: scale(1.12); }
+.indusFlagshipVisual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(5,7,9,0.85)); }
+.indusFlagshipVisualHud {
+  position: absolute; top: 14px; left: 14px; right: 14px; display: flex; justify-content: space-between;
+  font-family: var(--indus-font-mono); font-size: 10.5px; color: var(--indus-blue2); letter-spacing: .1em;
+  z-index: 2;
+}
+.indusFlagshipScan {
+  position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--indus-blue2), transparent);
+  animation: indusScan 3.4s linear infinite; opacity: .8; z-index: 2;
+}
+@keyframes indusScan { 0%{ top: 0%; } 100%{ top: 100%; } }
+
+.indusPortfolioRow { position: relative; z-index: 2; margin-top: 40px; padding-top: 30px; border-top: 1px solid var(--indus-border); }
+.indusPortfolioRowLabel { font-family: var(--indus-font-mono); font-size: 12px; letter-spacing: .1em; color: var(--indus-muted-dim); margin-bottom: 14px; display: block; }
+.indusPortfolioGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.indusPortfolioCard {
+  border: 1px dashed var(--indus-border); border-radius: 12px; padding: 16px; background: rgba(255,255,255,0.015);
+  transition: border-color .25s, background .25s, transform .25s;
+}
+.indusPortfolioCard:hover { border-color: var(--indus-border-hi); background: rgba(59,130,255,0.05); transform: translateY(-3px); }
+.indusPortfolioCard b { display: block; font-size: 13.5px; margin-bottom: 4px; }
+.indusPortfolioCard span { font-size: 11.5px; color: var(--indus-muted-dim); font-family: var(--indus-font-mono); }
+
+/* =================================================================
+   INDUSTRY CARDS
+   ================================================================= */
+.indusIndustries {
+  position: relative; z-index: 3; max-width: 1400px; margin: 46px auto 0; padding: 0 clamp(14px,4vw,48px);
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 22px;
+}
+.indusCard {
+  position: relative; border-radius: var(--indus-radius); padding: 26px 24px 24px;
+  background: var(--indus-glass); border: 1px solid var(--indus-border);
+  backdrop-filter: blur(14px); overflow: hidden;
+  transform-style: preserve-3d; will-change: transform;
+  transition: border-color .35s var(--indus-ease), box-shadow .35s var(--indus-ease), transform .1s linear;
+}
+.indusCard::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; opacity: 0; border-radius: inherit;
+  background: radial-gradient(340px circle at var(--indus-mx,50%) var(--indus-my,0%), rgba(59,130,255,0.16), transparent 60%);
+  transition: opacity .35s;
+}
+.indusCard:hover::before { opacity: 1; }
+.indusCard:hover { border-color: var(--indus-border-hi); box-shadow: 0 24px 60px -30px rgba(59,130,255,0.45); }
+
+.indusCardTop { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.indusCardIcon {
+  width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  background: rgba(59,130,255,0.1); border: 1px solid var(--indus-border-hi); font-size: 21px;
+}
+.indusCardIndex { font-family: var(--indus-font-mono); font-size: 11.5px; color: var(--indus-muted-dim); }
+
+.indusCardImg { position: relative; z-index: 1; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; margin-bottom: 18px; border: 1px solid var(--indus-border); }
+.indusCardImg img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85) brightness(.8); transition: transform .7s var(--indus-ease), filter .4s; }
+.indusCard:hover .indusCardImg img { transform: scale(1.08); filter: saturate(1) brightness(.92); }
+.indusCardImg::after { content:""; position:absolute; inset:0; background: linear-gradient(180deg, transparent 55%, rgba(5,7,9,0.75)); }
+
+.indusCardTitle { position: relative; z-index: 1; font-family: var(--indus-font-display); font-size: 1.28rem; font-weight: 700; margin: 0 0 8px; }
+.indusCardDesc { position: relative; z-index: 1; color: var(--indus-muted); font-size: 13.5px; margin-bottom: 16px; min-height: 40px; }
+
+.indusMeter { position: relative; z-index: 1; margin-bottom: 16px; }
+.indusMeterTop { display: flex; justify-content: space-between; font-family: var(--indus-font-mono); font-size: 11px; color: var(--indus-muted); margin-bottom: 6px; }
+.indusMeterTrack { height: 6px; border-radius: 6px; background: rgba(255,255,255,0.07); overflow: hidden; }
+.indusMeterFill {
+  height: 100%; width: 0%; border-radius: 6px;
+  background: linear-gradient(90deg, var(--indus-blue-dim), var(--indus-blue), var(--indus-blue2));
+  box-shadow: 0 0 10px 1px rgba(59,130,255,0.6);
+  transition: width 1.4s var(--indus-ease);
+}
+
+.indusCardStats { position: relative; z-index: 1; display: flex; gap: 18px; margin-bottom: 16px; }
+.indusCardStats div b { display: block; font-family: var(--indus-font-display); font-size: 1.1rem; }
+.indusCardStats div span { font-size: 10.5px; color: var(--indus-muted-dim); text-transform: uppercase; letter-spacing: .06em; }
+
+.indusChips { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.indusChip { font-size: 11px; padding: 4px 9px; border-radius: 6px; background: rgba(255,255,255,0.045); border: 1px solid var(--indus-border); color: var(--indus-muted); font-family: var(--indus-font-mono); }
+
+.indusCardFoot { position: relative; z-index: 1; border-top: 1px solid var(--indus-border); padding-top: 14px; }
+.indusCardFootLabel { font-size: 10.5px; color: var(--indus-muted-dim); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; display: block; font-family: var(--indus-font-mono); }
+.indusProjList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.indusProjList li { font-size: 12.5px; color: var(--indus-white); opacity: .85; display: flex; align-items: center; gap: 7px; }
+.indusProjList li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--indus-blue2); flex: none; }
+
+/* =================================================================
+   STATS SECTION
+   ================================================================= */
+.indusStatsSection { position: relative; padding: 130px 0 100px; overflow: hidden; }
+.indusRadarBg {
+  position: absolute; top: 50%; left: 50%; width: 900px; height: 900px; transform: translate(-50%,-50%);
+  border-radius: 50%; pointer-events: none; opacity: .25;
+  background:
+    repeating-radial-gradient(circle, rgba(59,130,255,0.08) 0 1px, transparent 1px 90px);
+}
+.indusRadarBg::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(59,130,255,0.5), transparent 30%);
+  animation: indusRadarSpin 6s linear infinite;
+  mask-image: radial-gradient(circle, black 60%, transparent 62%);
+}
+@keyframes indusRadarSpin { to { transform: rotate(360deg); } }
+
+.indusStatsGrid {
+  position: relative; z-index: 2; max-width: 1180px; margin: 50px auto 0; padding: 0 clamp(20px,5vw,64px);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px;
+}
+.indusStatCard {
+  padding: 24px 20px; border-radius: 16px; border: 1px solid var(--indus-border); background: var(--indus-glass);
+  text-align: left; backdrop-filter: blur(10px); transition: border-color .3s, transform .3s;
+}
+.indusStatCard:hover { border-color: var(--indus-border-hi); transform: translateY(-4px); }
+.indusStatNumber { font-family: var(--indus-font-display); font-weight: 800; font-size: clamp(1.9rem,3vw,2.6rem); display: flex; align-items: baseline; gap: 2px; }
+.indusStatSuffix { font-size: 1.1rem; color: var(--indus-blue2); }
+.indusStatLabel { color: var(--indus-muted); font-size: 12.5px; margin-top: 6px; }
+
+.indusRingsGrid {
+  position: relative; z-index: 2; max-width: 1180px; margin: 60px auto 0; padding: 0 clamp(20px,5vw,64px);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;
+}
+.indusRingCard { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.indusRing { width: 108px; height: 108px; position: relative; }
+.indusRing svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+.indusRing circle { fill: none; stroke-width: 7; }
+.indusRingTrack { stroke: rgba(255,255,255,0.08); }
+.indusRingFill { stroke: url(#indusRingGradient); stroke-linecap: round; stroke-dasharray: 301; stroke-dashoffset: 301; transition: stroke-dashoffset 1.6s var(--indus-ease); filter: drop-shadow(0 0 6px rgba(59,130,255,0.7)); }
+.indusRingValue { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--indus-font-display); font-weight: 700; font-size: 1.1rem; }
+.indusRingLabel { font-size: 12.5px; color: var(--indus-muted); max-width: 130px; }
+
+/* =================================================================
+   PLATFORMS
+   ================================================================= */
+.indusPlatformsSection { padding: 110px 0 100px; position: relative; }
+.indusPlatformsTabs {
+  position: relative; z-index: 2; max-width: 1180px; margin: 34px auto 30px; padding: 0 clamp(20px,5vw,64px);
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.indusPTab {
+  padding: 8px 16px; border-radius: 999px; border: 1px solid var(--indus-border); background: var(--indus-glass);
+  color: var(--indus-muted); font-size: 12.5px; font-family: var(--indus-font-mono); transition: all .25s;
+}
+.indusPTab:hover { color: var(--indus-white); border-color: var(--indus-border-hi); }
+.indusPTab.indusPTabActive { color: var(--indus-black); background: var(--indus-blue2); border-color: var(--indus-blue2); font-weight: 600; }
+
+.indusPlatformsWall {
+  max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px,5vw,64px);
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px;
+}
+.indusPTile {
+  padding: 18px 16px; border-radius: 14px; border: 1px solid var(--indus-border); background: var(--indus-glass);
+  display: flex; flex-direction: column; gap: 10px; transition: all .3s var(--indus-ease); position: relative; overflow: hidden;
+}
+.indusPTile:hover { transform: translateY(-5px); border-color: var(--indus-border-hi); background: rgba(59,130,255,0.06); }
+.indusPTileIcon { font-size: 22px; }
+.indusPTileName { font-size: 13.5px; font-weight: 600; }
+.indusPTileCat { font-size: 10.5px; color: var(--indus-muted-dim); font-family: var(--indus-font-mono); text-transform: uppercase; letter-spacing: .05em; }
+.indusPTileMeter { height: 3px; border-radius: 3px; background: rgba(255,255,255,0.08); overflow: hidden; margin-top: 2px; }
+.indusPTileMeter span { display: block; height: 100%; background: linear-gradient(90deg, var(--indus-blue), var(--indus-blue2)); width: 0%; transition: width 1.2s var(--indus-ease); }
+.indusPTile.indusHidden { display: none; }
+
+/* =================================================================
+   PROJECTS
+   ================================================================= */
+.indusProjectsSection { padding: 110px 0 100px; }
+.indusProjectsGrid {
+  max-width: 1300px; margin: 40px auto 0; padding: 0 clamp(20px,5vw,64px);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px;
+}
+.indusProjCard { border-radius: 18px; overflow: hidden; border: 1px solid var(--indus-border); background: var(--indus-glass); transition: border-color .3s, transform .3s; }
+.indusProjCard:hover { border-color: var(--indus-border-hi); transform: translateY(-6px); }
+.indusProjImg { aspect-ratio: 16/10; position: relative; overflow: hidden; }
+.indusProjImg img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85) brightness(.82); transition: transform .7s var(--indus-ease); }
+.indusProjCard:hover .indusProjImg img { transform: scale(1.1); }
+.indusProjImg::after { content:""; position:absolute; inset:0; background: linear-gradient(180deg, transparent 50%, rgba(5,7,9,0.8)); }
+.indusProjBadge { position: absolute; top: 12px; left: 12px; z-index: 2; font-family: var(--indus-font-mono); font-size: 10.5px; padding: 4px 10px; border-radius: 999px; background: rgba(5,7,9,0.7); border: 1px solid var(--indus-border-hi); color: var(--indus-blue2); }
+.indusProjBody { padding: 20px; }
+.indusProjTitle { font-family: var(--indus-font-display); font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+.indusProjDesc { color: var(--indus-muted); font-size: 13px; margin-bottom: 14px; }
+.indusProjTags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.indusProjBtn {
+  display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600;
+  padding: 9px 16px; border-radius: 999px; border: 1px solid var(--indus-border-hi); color: var(--indus-blue2);
+  transition: background .25s, color .25s;
+}
+.indusProjBtn:hover { background: var(--indus-blue2); color: var(--indus-black); }
+
+/* =================================================================
+   WHY / TIMELINE
+   ================================================================= */
+.indusWhySection { padding: 110px 0 100px; }
+.indusTimeline { max-width: 900px; margin: 50px auto 0; padding: 0 clamp(20px,5vw,64px); position: relative; }
+.indusTimeline::before { content: ""; position: absolute; left: 27px; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, var(--indus-blue), transparent); }
+.indusTimeItem { position: relative; padding-left: 66px; margin-bottom: 42px; }
+.indusTimeItem:last-child { margin-bottom: 0; }
+.indusTimeDot {
+  position: absolute; left: 18px; top: 2px; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--indus-black2); border: 2px solid var(--indus-blue2); box-shadow: 0 0 0 4px rgba(59,130,255,0.12);
+}
+.indusTimeDot::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--indus-blue2); animation: indusPulseDot 2s ease infinite; }
+.indusTimeTitle { font-family: var(--indus-font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 6px; }
+.indusTimeDesc { color: var(--indus-muted); font-size: 14px; max-width: 560px; }
+
+/* =================================================================
+   FUTURE / ROADMAP
+   ================================================================= */
+.indusFutureSection { padding: 110px 0 120px; }
+.indusRoadmap { position: relative; max-width: 1200px; margin: 60px auto 0; padding: 0 clamp(20px,5vw,64px); }
+.indusRoadmapLine { position: absolute; top: 0; left: 0; width: 100%; height: 4px; overflow: visible; }
+.indusRoadmapLine line { stroke: rgba(255,255,255,0.1); stroke-width: 2; }
+.indusRoadmapLine .indusLineDraw { stroke: var(--indus-blue2); stroke-width: 2; stroke-dasharray: 1200; stroke-dashoffset: 1200; transition: stroke-dashoffset 1.8s var(--indus-ease); filter: drop-shadow(0 0 6px var(--indus-blue2)); }
+.indusRoadmapTrack { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding-top: 44px; }
+@media (max-width: 900px) { .indusRoadmapTrack { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .indusRoadmapTrack { grid-template-columns: 1fr; } }
+.indusRoadStage { position: relative; padding: 22px 18px; border-radius: 16px; border: 1px solid var(--indus-border); background: var(--indus-glass); }
+.indusRoadStage::before { content: ""; position: absolute; top: -34px; left: 20px; width: 12px; height: 12px; border-radius: 50%; background: var(--indus-blue2); box-shadow: 0 0 10px 2px var(--indus-blue2); }
+.indusRoadTag { font-family: var(--indus-font-mono); font-size: 10.5px; color: var(--indus-blue2); text-transform: uppercase; letter-spacing: .08em; }
+.indusRoadTitle { font-family: var(--indus-font-display); font-weight: 700; font-size: 1.05rem; margin: 8px 0 8px; }
+.indusRoadDesc { font-size: 12.5px; color: var(--indus-muted); }
+
+/* =================================================================
+   CTA
+   ================================================================= */
+.indusCta { position: relative; text-align: center; padding: 130px 20px 150px; overflow: hidden; }
+.indusCtaGlow { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 700px; height: 400px; background: radial-gradient(ellipse, rgba(59,130,255,0.28), transparent 70%); filter: blur(40px); pointer-events: none; }
+.indusCtaTitle { position: relative; z-index: 2; font-family: var(--indus-font-display); font-weight: 800; font-size: clamp(2rem,4.4vw,3.2rem); margin-bottom: 16px; }
+.indusCtaSub { position: relative; z-index: 2; color: var(--indus-muted); margin-bottom: 34px; }
+.indusMagnetBtn {
+  position: relative; z-index: 2; display: inline-flex; align-items: center; justify-content: center;
+  padding: 16px 36px; border-radius: 999px; background: var(--indus-blue2); color: var(--indus-black);
+  font-weight: 700; font-size: 14.5px; transition: transform .25s var(--indus-ease), box-shadow .25s;
+  box-shadow: 0 0 40px -8px rgba(94,200,255,0.7);
+}
+.indusMagnetBtn:hover { box-shadow: 0 0 60px -6px rgba(94,200,255,0.9); }
+
+/* =================================================================
+   SHOWREEL
+   ================================================================= */
+.indusVideoSection { position: relative; z-index: 3; max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px,5vw,64px) 135px; }
+.indusVideoIntro { margin-bottom: 28px; }
+.indusVideoIntro .indusSectionTitle { margin-bottom: 0; }
+.indusVideoFrame { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid var(--indus-border-hi); border-radius: 22px; background: #020407; box-shadow: 0 35px 90px rgba(0,0,0,.48), 0 0 70px rgba(59,130,255,.14); isolation: isolate; }
+.indusVideoFrame::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(120deg, rgba(94,200,255,.18), transparent 28%, transparent 72%, rgba(59,130,255,.16)); transition: opacity .35s ease; }
+.indusVideoFrame::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; border: 1px solid rgba(255,255,255,.12); border-radius: inherit; }
+.indusShowreel { display: block; width: 100%; height: 100%; object-fit: cover; background: #020407; }
+.indusVideoPlay { position: absolute; z-index: 2; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; border: 0; color: var(--indus-white); background: radial-gradient(circle, rgba(5,7,9,.12), rgba(2,4,7,.62)); cursor: pointer; transition: opacity .35s ease, visibility .35s ease, background .35s ease; }
+.indusVideoPlay:hover { background: radial-gradient(circle, rgba(59,130,255,.14), rgba(2,4,7,.5)); }
+.indusVideoPlay:focus-visible { outline: 3px solid var(--indus-blue2); outline-offset: -6px; }
+.indusVideoPlayIcon { width: 84px; height: 84px; border: 1px solid rgba(255,255,255,.54); border-radius: 50%; background: rgba(94,200,255,.12); box-shadow: 0 0 0 12px rgba(94,200,255,.08), 0 0 42px rgba(94,200,255,.36); display: grid; place-items: center; transition: transform .3s var(--indus-ease), background .3s ease; }
+.indusVideoPlay:hover .indusVideoPlayIcon { transform: scale(1.08); background: rgba(94,200,255,.24); }
+.indusVideoPlayIcon::after { content: ""; margin-left: 6px; border-left: 20px solid currentColor; border-top: 12px solid transparent; border-bottom: 12px solid transparent; }
+.indusVideoPlayText { font-family: var(--indus-font-display); font-size: 1.05rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.indusVideoPlayText small { display: block; margin-top: 5px; font-family: var(--indus-font-mono); font-size: .61rem; font-weight: 500; letter-spacing: .17em; color: var(--indus-blue2); }
+.indusVideoBadge { position: absolute; z-index: 2; right: 18px; bottom: 16px; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: rgba(3,6,10,.58); backdrop-filter: blur(8px); font-family: var(--indus-font-mono); font-size: 9px; letter-spacing: .1em; color: rgba(244,247,251,.8); pointer-events: none; }
+.indusVideoBadge i { width: 6px; height: 6px; border-radius: 50%; background: #ff4f6d; box-shadow: 0 0 9px #ff4f6d; }
+.indusVideoFrame.indusVideoPlaying::before { opacity: .35; }
+.indusVideoFrame.indusVideoPlaying .indusVideoPlay { opacity: 0; visibility: hidden; pointer-events: none; }
+@media (max-width: 640px) { .indusVideoSection { padding-bottom: 85px; } .indusVideoFrame { border-radius: 14px; } .indusVideoPlayIcon { width: 64px; height: 64px; } .indusVideoPlayIcon::after { border-left-width: 16px; border-top-width: 10px; border-bottom-width: 10px; } .indusVideoBadge { right: 10px; bottom: 10px; font-size: 8px; } }
+
+/* =================================================================
+   RESPONSIVE
+   ================================================================= */
+@media (max-width: 640px) {
+  .indusFlagship { margin: 60px 10px 0; padding: 24px; }
+  .indusHero { padding-top: 120px; }
+  .indusStatsSection, .indusPlatformsSection, .indusProjectsSection, .indusWhySection, .indusFutureSection { padding: 80px 0 70px; }
+}
