@@ -1,4 +1,4 @@
-const CACHE_NAME = 'diamond-v2026-07-24';
+const CACHE_NAME = 'diamond-v2026-07-26';
 
 const APP_SHELL = [
   './',
