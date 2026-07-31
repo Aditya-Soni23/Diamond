@@ -129,6 +129,19 @@
       border: 1px solid rgba(255, 69, 58, 0.3);
       color: #ff453a;
     }
+    .admin-stack { display: grid; gap: 24px; }
+    .event-console { border-color: rgba(125, 202, 255, .22); }
+    .console-kicker { color: #78d9ff; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 7px; }
+    .console-heading { font-size: 20px; margin-bottom: 7px; }
+    .console-description { color: #9ba7b6; font-size: 13px; line-height: 1.5; margin-bottom: 24px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .checkbox-group { display: flex; align-items: center; gap: 10px; margin: 4px 0 24px; color: #cbd4df; font-size: 14px; }
+    .checkbox-group input { width: 17px; height: 17px; accent-color: #65d7ff; }
+    .event-list { display: grid; gap: 10px; margin-top: 24px; }
+    .event-list-title { color: #8a8a93; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+    .event-item { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 13px; border: 1px solid rgba(255,255,255,.08); border-radius: 10px; background: rgba(255,255,255,.025); }
+    .event-item strong { display: block; font-size: 14px; }.event-item small { color: #8a9aab; font-size: 11px; }.event-item button { width: auto; padding: 8px 10px; border: 1px solid rgba(255,69,58,.35); border-radius: 7px; color: #ff877f; background: rgba(255,69,58,.08); cursor: pointer; font-size: 12px; }
+    @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; gap: 0; } }
   </style>
 </head>
 <body>
@@ -143,6 +156,7 @@
       <button class="logout-btn" id="logoutBtn">Sign Out</button>
     </div>
 
+    <div class="admin-stack">
     <div class="upload-box">
       <form id="uploadForm">
         <div class="form-group">
@@ -169,12 +183,35 @@
         <div class="status-banner" id="statusBanner"></div>
       </form>
     </div>
+    <div class="upload-box event-console">
+      <p class="console-kicker">LIVE WEBSITE CONTENT</p>
+      <h2 class="console-heading">Publish an event</h2>
+      <p class="console-description">Events appear in the new “Happening now” section and can be surfaced in the opening notification.</p>
+      <form id="eventForm">
+        <div class="form-group"><label for="eventTitle">Event title</label><input id="eventTitle" maxlength="70" required placeholder="e.g., DIAMOND Build Night"></div>
+        <div class="form-group"><label for="eventDescription">Description</label><textarea id="eventDescription" rows="3" maxlength="240" required placeholder="What makes this event worth joining?"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label for="eventIcon">Icon image link (optional)</label><input id="eventIcon" type="url" placeholder="https://example.com/icon.png"></div>
+          <div class="form-group"><label for="eventLink">Event link (optional)</label><input id="eventLink" type="url" placeholder="https://example.com/event"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="eventStart">Starts on (optional)</label><input id="eventStart" type="datetime-local"></div>
+          <div class="form-group"><label for="eventEnd">Ends on (optional)</label><input id="eventEnd" type="datetime-local"></div>
+        </div>
+        <label class="checkbox-group"><input id="eventActive" type="checkbox" checked> Display this event immediately</label>
+        <button type="submit" class="submit-btn">Publish Event</button>
+        <div class="status-banner" id="eventStatusBanner"></div>
+      </form>
+      <div class="event-list-title">PUBLISHED EVENTS</div>
+      <div class="event-list" id="eventList"></div>
+    </div>
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, push, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, push, update, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBvS4HJ07d7Umyb89dCsn2bLALvcqnpoSs",
@@ -237,6 +274,55 @@
         statusBanner.className = "status-banner error";
         statusBanner.style.display = 'block';
       }
+    });
+
+    const eventForm = document.getElementById('eventForm');
+    const eventStatus = document.getElementById('eventStatusBanner');
+    const eventList = document.getElementById('eventList');
+    const showEventStatus = (message, kind) => {
+      eventStatus.textContent = message;
+      eventStatus.className = `status-banner ${kind}`;
+      eventStatus.style.display = 'block';
+    };
+
+    eventForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const startsAt = document.getElementById('eventStart').value;
+      const endsAt = document.getElementById('eventEnd').value;
+      if (startsAt && endsAt && new Date(endsAt) < new Date(startsAt)) {
+        showEventStatus('The end time must be after the start time.', 'error'); return;
+      }
+      const payload = {
+        title: document.getElementById('eventTitle').value.trim(),
+        description: document.getElementById('eventDescription').value.trim(),
+        iconLink: document.getElementById('eventIcon').value.trim(),
+        link: document.getElementById('eventLink').value.trim(),
+        startsAt: startsAt ? new Date(startsAt).toISOString() : '',
+        endsAt: endsAt ? new Date(endsAt).toISOString() : '',
+        active: document.getElementById('eventActive').checked,
+        createdAt: Date.now()
+      };
+      try {
+        await update(push(ref(db, 'events')), payload);
+        eventForm.reset(); document.getElementById('eventActive').checked = true;
+        showEventStatus('Event published. It is now live on the website.', 'success');
+      } catch (error) { showEventStatus(`Event error: ${error.message}`, 'error'); }
+    });
+
+    onValue(ref(db, 'events'), (snapshot) => {
+      const events = Object.entries(snapshot.val() || {}).map(([id, value]) => ({ id, ...value })).sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+      eventList.replaceChildren();
+      if (!events.length) eventList.innerHTML = '<small>No events published yet.</small>';
+      events.forEach(event => {
+        const row = document.createElement('div'); row.className = 'event-item';
+        const copy = document.createElement('div');
+        const title = document.createElement('strong'); title.textContent = event.title || 'Untitled event';
+        const meta = document.createElement('small'); meta.textContent = event.active === false ? 'Hidden from website' : 'Live on website';
+        copy.append(title, meta);
+        const removeButton = document.createElement('button'); removeButton.type = 'button'; removeButton.textContent = 'Delete';
+        removeButton.onclick = async () => { if (confirm(`Delete “${event.title}”?`)) await remove(ref(db, `events/${event.id}`)); };
+        row.append(copy, removeButton); eventList.append(row);
+      });
     });
 
     // 3. Secure Sign Out

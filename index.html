@@ -1781,6 +1781,20 @@
         </div>
         <a href="wallofframe.html" class="wallOfFrameCtaButton">Enter Wall of Frame <span aria-hidden="true">↗</span></a>
     </section><br>
+    <section class="diamond-events" id="events" aria-labelledby="events-title">
+        <div class="diamond-events-aurora" aria-hidden="true"></div>
+        <div class="diamond-events-heading">
+            <div>
+                <span class="diamond-events-kicker"><i></i> HAPPENING NOW</span>
+                <h2 id="events-title">Make plans with <em>DIAMOND.</em></h2>
+            </div>
+            <p>Launches, challenges, workshops and special moments — all in one place.</p>
+        </div>
+        <div class="diamond-events-grid" id="diamond-events-grid" aria-live="polite">
+            <div class="diamond-events-loading"><span></span> Loading upcoming experiences…</div>
+        </div>
+        <p class="diamond-events-empty" id="diamond-events-empty" hidden>Fresh experiences are being crafted. Check back soon.</p>
+    </section><br>
     <section class="wallOfFrameCta" aria-label="Wall of Frame invitation">
         <div class="wallOfFrameCtaGlow" aria-hidden="true"></div>
         <div>
@@ -1992,12 +2006,24 @@
 
     <canvas id="fluid"></canvas>
 
+    <aside class="event-notice" id="event-notice" aria-live="polite" aria-hidden="true">
+        <div class="event-notice-progress" id="event-notice-progress"></div>
+        <div class="event-notice-orb" aria-hidden="true"></div>
+        <div class="event-notice-copy">
+            <span><i></i> NEW AT DIAMOND</span>
+            <strong id="event-notice-title">A new experience is live</strong>
+        </div>
+        <a class="event-notice-link" id="event-notice-link" href="#events">Show events <i class="fa-solid fa-arrow-right"></i></a>
+        <button class="event-notice-close" id="event-notice-close" type="button" aria-label="Dismiss event notification"><i class="fa-solid fa-xmark"></i></button>
+    </aside>
+
     <!-- Scripts -->
      <script src="cursor.js"></script>
      <!-- Products JavaScript -->
     <script type="module" src="products/products.js"></script>
     <script src="script.js"></script>
     <script src="industries/industries.js"></script>
+    <script type="module" src="events.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));

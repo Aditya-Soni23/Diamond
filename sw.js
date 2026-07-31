@@ -1,10 +1,11 @@
-const CACHE_NAME = 'diamond-v2026-07-26';
+const CACHE_NAME = 'diamond-v2026-07-31-events';
 
 const APP_SHELL = [
   './',
   'index.html',
   'style.css',
   'script.js',
+  'events.js',
   'cursor.js',
   'manifest.json',
   'assets/applogo.png',
